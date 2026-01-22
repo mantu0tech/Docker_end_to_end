@@ -1,0 +1,6 @@
+# Ignore MySQL runtime files
+mysql-data/mysql.sock
+mysql-data/*.pid
+*.pyc
+__pycache__/
+.env

@@ -1,0 +1,293 @@
+# 🐳 Docker Basics – Complete Hands-On Guide (README)
+
+This README explains **Docker fundamentals** using real commands:
+
+* Docker images
+* Docker containers
+* Nginx example
+* MySQL example
+* Logs & attach
+* `run` vs `create`
+* Common Docker commands (explained clearly)
+
+---
+
+## 📌 What is Docker?
+
+Docker is a **containerization platform** that packages applications with their dependencies so they run **consistently everywhere**.
+
+---
+
+## 📦 Docker Image vs Container
+
+| Term             | Meaning                      |
+| ---------------- | ---------------------------- |
+| Docker Image     | Blueprint / template         |
+| Docker Container | Running instance of an image |
+
+---
+
+## 🔹 Basic Docker Image Commands
+
+### 1️⃣ Pull an image from Docker Hub
+
+```bash
+docker pull nginx
+```
+
+### 2️⃣ List downloaded images
+
+```bash
+docker images
+```
+
+---
+
+## 🚀 Running Nginx Containers
+
+### 3️⃣ Run nginx in detached mode on port 80
+
+```bash
+docker run -d --name mynginx -p 80:80 nginx
+```
+
+Explanation:
+
+* `-d` → detached mode
+* `--name mynginx` → container name
+* `-p 80:80` → host port 80 → container port 80
+
+---
+
+### 4️⃣ Run a second nginx container on a different port
+
+```bash
+docker run -d --name mtry -p 85:80 nginx
+```
+
+📌 Multiple containers **can use the same internal port** as long as **host ports are different**.
+
+---
+
+## 📋 Container Management Commands
+
+### 5️⃣ List running containers
+
+```bash
+docker ps
+```
+
+### 6️⃣ List all containers (running + stopped)
+
+```bash
+docker ps -a
+```
+
+---
+
+### 7️⃣ Stop running containers
+
+```bash
+docker stop mynginx
+docker stop mtry
+```
+
+---
+
+### 8️⃣ Start stopped containers
+
+```bash
+docker start mynginx
+docker start mtry
+```
+
+📌 Containers can be **reused** after stopping.
+
+---
+
+## 📜 Docker Logs & Attach
+
+### 9️⃣ View container logs
+
+```bash
+docker logs mtry
+```
+
+✔ Shows container output
+✔ Used for debugging
+✔ Safe for background containers
+
+---
+
+### 🔴 Attach to container (real-time output)
+
+```bash
+docker attach <container_id>
+```
+
+⚠️ Warning:
+
+* Attaches STDIN/STDOUT
+* Ctrl+C may stop the container
+
+👉 **Best Practice**: Prefer `docker logs`
+
+---
+
+## 📂 Copy Files into Container
+
+### 🔹 Copy `index.html` to nginx container
+
+```bash
+docker cp ./index.html mtry:/usr/share/nginx/html/index.html
+```
+
+📌 Used to update running containers without rebuilding images.
+
+---
+
+## ❌ Removing Containers & Images
+
+### 🔟 Remove a stopped container
+
+```bash
+docker rm mtry
+```
+
+📌 Container must be **stopped first**.
+
+---
+
+### 1️⃣1️⃣ Remove an image
+
+```bash
+docker rmi nginx
+```
+
+📌 Image can be removed **only if no container is using it**.
+
+---
+
+## 🧪 docker run vs docker create
+
+### docker run
+
+```bash
+docker run -it python
+```
+
+✔ Creates + starts container
+✔ Most commonly used
+
+---
+
+### docker create
+
+```bash
+docker create --name mantu python
+docker start mantu
+```
+
+✔ Only creates container
+✔ Useful when configuration is needed before start
+
+---
+
+## 🐬 Running MySQL with Docker
+
+### 1️⃣ Pull MySQL image
+
+```bash
+docker pull mysql
+```
+
+---
+
+### 2️⃣ Run MySQL container
+
+```bash
+docker run -d \
+--name data \
+-e MYSQL_ROOT_PASSWORD=root \
+mysql
+```
+
+Explanation:
+
+* `-e` → environment variable
+* `MYSQL_ROOT_PASSWORD` is **mandatory**
+
+---
+
+### 3️⃣ Access MySQL shell
+
+```bash
+docker exec -it data mysql -u root -p
+```
+
+✔ `exec` → run command inside container
+✔ `-it` → interactive terminal
+
+---
+
+### 4️⃣ View MySQL logs
+
+```bash
+docker logs data
+```
+
+✔ Used to check startup errors
+✔ Shows database initialization logs
+
+---
+
+## 🧠 Key Concepts Summary
+
+| Command       | Purpose                  |
+| ------------- | ------------------------ |
+| docker pull   | Download image           |
+| docker images | List images              |
+| docker run    | Create + start container |
+| docker create | Create only              |
+| docker start  | Start stopped container  |
+| docker stop   | Stop container           |
+| docker ps     | Running containers       |
+| docker ps -a  | All containers           |
+| docker logs   | View logs                |
+| docker attach | Live output              |
+| docker cp     | Copy files               |
+| docker rm     | Remove container         |
+| docker rmi    | Remove image             |
+
+---
+
+## 🎯 Important DevOps Notes
+
+* Containers are **ephemeral**
+* Data is lost unless **volumes** are used
+* Logs are critical for debugging
+* Multiple containers can run from one image
+* Ports must be unique on the host
+
+---
+
+## ✅ Best Practices
+
+✔ Use meaningful container names
+✔ Prefer `docker logs` over `attach`
+✔ Use volumes for databases
+✔ Stop containers instead of deleting
+✔ Clean unused images regularly
+
+---
+
+## 🚀 Final Thought
+
+This README covers **core Docker skills** required for:
+
+* Beginners
+* DevOps engineers
+* Interviews
+* Real-world usage
+
+Happy Dockering 🐳

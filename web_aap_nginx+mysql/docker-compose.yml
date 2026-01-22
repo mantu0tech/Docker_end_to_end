@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - mynet
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mynet
+    restart: always
+
+  django:
+    build:
+      context: .
+    container_name: notes_app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - mynet
+    restart: always
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  mynet:

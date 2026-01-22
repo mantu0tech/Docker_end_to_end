@@ -1,0 +1,18 @@
+to run your project the copy it from github 
+cd your repo 
+https://github.com/SafdarJamal/quiz-app?tab=readme-ov-file
+npm install 
+npm fund 
+npm audit fix --force 
+npm start 
+npm install react-scripts --save
+npm start 
+npm uninstall react-scripts
+npm install react-scripts --save
+
+
+npm start 
+
+if nmp run fails then try these 
+npm audit fix --force
+

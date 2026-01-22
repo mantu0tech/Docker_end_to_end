@@ -1,0 +1,16 @@
+3️⃣ Why do DevOps engineers create multi-stage builds?
+
+Think of it like making a final product in a factory:
+
+Stage 1 = factory production line (needs all machinery/tools)
+
+Stage 2 = packaged product ready for store (only what’s needed to run)
+
+Advantages:
+
+Feature	                            Single-Stage	Multi-Stage
+Image size	                        Large	        Small
+Build tools in final image	        Yes	            No
+Security	                        Lower	        Higher
+Build caching	                    Limited	        Better if structured
+Production ready	                Not optimal	    ✅

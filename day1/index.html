@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .add-book-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.9em;
+        }
+
+        .btn-delete:hover {
+            background: #ff3838;
+            transform: scale(1.05);
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .book-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .book-author {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .book-rating {
+            color: #ffa502;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .book-review {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .book-genre {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: white;
+            font-size: 1.3em;
+            padding: 60px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 My Book Blog</h1>
+            <p class="subtitle">Share your reading journey</p>
+        </header>
+
+        <div class="add-book-form">
+            <h2 class="form-title">Add a New Book</h2>
+            <form id="bookForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="title">Book Title *</label>
+                        <input type="text" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Author *</label>
+                        <input type="text" id="author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <select id="genre">
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Mystery">Mystery</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Fantasy">Fantasy</option>
+                            <option value="Biography">Biography</option>
+                            <option value="Self-Help">Self-Help</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating (1-5) *</label>
+                        <input type="number" id="rating" min="1" max="5" value="5" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="review">Your Review *</label>
+                        <textarea id="review" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Book</button>
+            </form>
+        </div>
+
+        <div id="booksContainer" class="books-grid"></div>
+    </div>
+
+    <script>
+        let books = [];
+
+        const form = document.getElementById('bookForm');
+        const booksContainer = document.getElementById('booksContainer');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            addBook();
+        });
+
+        function addBook() {
+            const book = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                genre: document.getElementById('genre').value,
+                rating: parseInt(document.getElementById('rating').value),
+                review: document.getElementById('review').value
+            };
+
+            books.push(book);
+            form.reset();
+            renderBooks();
+        }
+
+        function deleteBook(id) {
+            books = books.filter(book => book.id !== id);
+            renderBooks();
+        }
+
+        function renderBooks() {
+            if (books.length === 0) {
+                booksContainer.innerHTML = '<div class="empty-state">No books added yet. Start by adding your first book review!</div>';
+                return;
+            }
+
+            booksContainer.innerHTML = books.map(book => `
+                <div class="book-card">
+                    <h3 class="book-title">${book.title}</h3>
+                    <p class="book-author">by ${book.author}</p>
+                    <div class="book-rating">${'⭐'.repeat(book.rating)}</div>
+                    <p class="book-review">${book.review}</p>
+                    <div class="book-meta">
+                        <span class="book-genre">${book.genre}</span>
+                        <button class="btn btn-delete" onclick="deleteBook(${book.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderBooks();
+    </script>
+</body>
+</html>

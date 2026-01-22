@@ -1,0 +1,49 @@
+# ======================
+# Global ignores
+# ======================
+.env
+*.log
+__pycache__/
+node_modules/
+target/
+dist/
+.vscode/
+.idea/
+
+# day3
+
+day3/node_modules/*
+
+
+# ======================
+# day5_python_docker_multistage
+# ======================
+day5_python_docker_multistage/__pycache__/
+day5_python_docker_multistage/.env
+day5_python_docker_multistage/venv/
+
+# ======================
+# day6_java_docker
+# ======================
+day6_java_docker/target/
+day6_java_docker/.classpath
+day6_java_docker/.project
+
+# ======================
+# dcompose_data_django
+# ======================
+dcompose_data_django/db.sqlite3
+dcompose_data_django/media/
+dcompose_data_django/.env
+
+# ======================
+# dcompose_database_java
+# ======================
+dcompose_database_java/target/
+dcompose_database_java/.env
+
+# ======================
+# web_aap_nginx+mysql
+# ======================
+web_aap_nginx+mysql/mysql-data/
+web_aap_nginx+mysql/.env

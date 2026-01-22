@@ -1,0 +1,323 @@
+{% extends 'user_interface/to-do-base.html' %}
+
+{% block content %}
+    <div class='container-fluid'>
+        <div class='container'>
+            <div class='row mt-4'>
+                <div class='col-sm-8 offset-2 mt-3'>
+                    <div class="card-wrapper">
+                        <div class="card-header-custom">
+                            <h1 class='card-title'>
+                                <span class="icon-bounce">✨</span> Create New Task
+                            </h1>
+                            <p class="card-subtitle">Add your task details below</p>
+                        </div>
+                        
+                        <form id="todoForm" action="{% url 'to_do_create' %}" method="POST" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="form-container">
+                                {{ form.as_p }}
+                                
+                                <div class="button-group">
+                                    <button type='submit' class='btn-custom btn-primary-custom'>
+                                        <span class="btn-icon">+</span>
+                                        <span class="btn-text">Add To Do</span>
+                                        <span class="btn-shine"></span>
+                                    </button>
+                                    
+                                    <button type='reset' class='btn-custom btn-secondary-custom'>
+                                        <span class="btn-icon">↺</span>
+                                        <span class="btn-text">Clear Form</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .card-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideInDown 0.6s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #a8b8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .icon-bounce {
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .form-container {
+            padding: 2.5rem;
+        }
+
+        .form-container p {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #a8b8ff;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-container input:focus,
+        .form-container textarea:focus,
+        .form-container select:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-container textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-custom {
+            flex: 1;
+            position: relative;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary-custom:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary-custom {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary-custom:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .btn-shine {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        /* Form validation styles */
+        .form-container input:invalid:not(:placeholder-shown),
+        .form-container textarea:invalid:not(:placeholder-shown) {
+            border-color: #fa709a;
+        }
+
+        .form-container input:valid,
+        .form-container textarea:valid {
+            border-color: rgba(132, 250, 176, 0.5);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Loading animation on submit */
+        .btn-custom.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('todoForm');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            // Add floating label effect
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+                
+                // Add input animation
+                input.addEventListener('input', function() {
+                    this.style.animation = 'none';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 10);
+                });
+            });
+            
+            // Form submission animation
+            form.addEventListener('submit', function(e) {
+                submitButton.classList.add('loading');
+                submitButton.querySelector('.btn-text').textContent = 'Creating...';
+            });
+            
+            // Reset button animation
+            const resetButton = form.querySelector('button[type="reset"]');
+            resetButton.addEventListener('click', function() {
+                inputs.forEach(input => {
+                    input.style.animation = 'shake 0.5s';
+                });
+                
+                setTimeout(() => {
+                    inputs.forEach(input => {
+                        input.style.animation = '';
+                    });
+                }, 500);
+            });
+            
+            // Add shake animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-10px); }
+                    75% { transform: translateX(10px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+{% endblock content %}
