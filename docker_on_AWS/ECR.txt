@@ -1,0 +1,223 @@
+Got it 👍
+Below are **clear, exam-ready + hands-on notes for ECR**, written step-by-step, including **EC2 launch, IAM role, Docker commands, tagging, and pushing to ECR**.
+
+---
+
+# 📦 Amazon ECR (Elastic Container Registry) – Notes & Hands-On
+
+## 🔹 What is Amazon ECR?
+
+Amazon **Elastic Container Registry (ECR)** is a **fully managed Docker container registry** provided by AWS.
+It is used to **store, manage, and deploy Docker images** securely.
+
+### 🔸 Key Features
+
+* Private container registry
+* Integrated with **IAM** for security
+* Works with **ECS, EKS, EC2**
+* Supports Docker & OCI images
+* Highly available and scalable
+
+---
+
+## 🔹 Architecture Flow
+
+```
+Docker Hub → EC2 Instance → Amazon ECR → ECS / EKS
+```
+
+---
+
+## 🧱 Step 1: Launch an EC2 Instance
+
+1. Go to **AWS Console → EC2 → Launch Instance**
+2. Choose:
+
+   * **AMI**: Amazon Linux 2
+   * **Instance Type**: t2.micro (Free Tier)
+3. Key pair: create or use existing
+4. Security Group:
+
+   * Allow **SSH (22)** from your IP
+5. Click **Launch**
+
+---
+
+## 🔐 Step 2: Create IAM Role for ECR Push
+
+### Create IAM Role
+
+1. Go to **IAM → Roles → Create Role**
+2. Trusted entity:
+
+   * **AWS Service**
+   * Use case: **EC2**
+3. Attach policy:
+
+   * ✅ `AmazonEC2ContainerRegistryFullAccess`
+4. Role name:
+
+   ```
+   ECR-Push-Role
+   ```
+5. Create role
+
+---
+
+## 🔗 Step 3: Attach IAM Role to EC2
+
+1. Go to **EC2 → Instances**
+2. Select your instance
+3. Actions → Security → Modify IAM Role
+4. Attach:
+
+   ```
+   ECR-Push-Role
+   ```
+5. Save
+
+---
+
+## 🐳 Step 4: Install Docker on EC2
+
+SSH into your EC2 instance:
+
+```bash
+ssh -i key.pem ec2-user@<public-ip>
+```
+
+Install Docker:
+
+```bash
+sudo yum update -y
+sudo amazon-linux-extras install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+Add user to docker group:
+
+```bash
+sudo usermod -aG docker ec2-user
+exit
+```
+
+Login again after exit.
+
+Verify Docker:
+
+```bash
+docker --version
+```
+
+---
+
+## 📥 Step 5: Pull Docker Image from Docker Hub
+
+Example: pull **nginx**
+
+```bash
+docker pull nginx:latest
+```
+
+Check image:
+
+```bash
+docker images
+```
+
+---
+
+## 🗂️ Step 6: Create ECR Repository
+
+1. Go to **AWS Console → ECR**
+2. Click **Create Repository**
+3. Visibility: **Private**
+4. Repository name:
+
+   ```
+   my-nginx-repo
+   ```
+5. Create repository
+
+Note the repository URI:
+
+```
+<aws_account_id>.dkr.ecr.<region>.amazonaws.com/my-nginx-repo
+```
+
+---
+
+## 🔑 Step 7: Authenticate Docker to ECR
+
+Run this command on EC2:
+
+```bash
+aws ecr get-login-password --region <region> | \
+docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
+```
+
+✅ Login Succeeded
+
+---
+
+## 🏷️ Step 8: Rename (Tag) Docker Image
+
+Syntax:
+
+```bash
+docker tag SOURCE_IMAGE:TAG ECR_REPO_URI:TAG
+```
+
+Example:
+
+```bash
+docker tag nginx:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/my-nginx-repo:v1
+```
+
+Verify:
+
+```bash
+docker images
+```
+
+---
+
+## 🚀 Step 9: Push Image to ECR
+
+```bash
+docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/my-nginx-repo:v1
+```
+
+You’ll see layers uploading → **Pushed successfully**
+
+---
+
+## ✅ Step 10: Verify in AWS Console
+
+1. Go to **ECR → Repositories**
+2. Open `my-nginx-repo`
+3. Image tag `v1` should be visible 🎉
+
+---
+
+## 🧠 Summary (Interview Ready)
+
+* **ECR** is AWS’s private Docker registry
+* Docker images can be:
+
+  * Pulled from Docker Hub
+  * Retagged
+  * Pushed to ECR
+* EC2 needs:
+
+  * Docker installed
+  * IAM role with ECR permissions
+* Common commands:
+
+```bash
+docker pull
+docker tag
+docker push
+```
+
