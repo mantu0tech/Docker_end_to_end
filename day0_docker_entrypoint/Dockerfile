@@ -4,7 +4,5 @@ WORKDIR /demo
 
 COPY . /demo/
 
-RUN pip install -r requirements.txt --no-cache-dir
-
 CMD [ "python" , "app.py" ]
 

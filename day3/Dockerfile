@@ -1,29 +1,22 @@
-# ARG DEMO=node:lts-alpine3.23:latest
+FROM  node:20-alpine
 
-# FROM ${DEMO}
-FROM node:lts-alpine3.23    
+LABEL name="mantasha" 
 
-LABEL maintainer="Ansari mantahsa" \
-      description="for thestin g the docker images " 
+ENV app-name="myquiz app"
 
-ENV APP_NAME='demo' \
-    PORT=3000
+WORKDIR /quiz
 
-WORKDIR /demo  
+COPY *.json /quiz
 
-
-COPY package*.json /demo
 RUN npm install \
-    npm audit fix --force \
-    npm install react-scripts --save
+    npm install react-scripts --save \
+    npm audit fix --force 
 
-COPY . /demo
+COPY    . /quiz/
 
 EXPOSE 3000
 
-CMD ["npm","start"]
-
-
+CMD [ "npm", "start" ]
 
 
 
